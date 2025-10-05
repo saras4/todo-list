@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,5 +9,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Avoid FOUC: set dark class early based on saved or system preference
+      (() => {
+        const ls = localStorage.getItem("theme");
+        const systemPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        const shouldDark = ls === "dark" || (ls == null && systemPrefersDark);
+        document.documentElement.classList.toggle("dark", shouldDark);
+      })();
+    </script>
   </body>
 </html>
