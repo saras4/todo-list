@@ -1,12 +1,15 @@
-// src/App.tsx
+import { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Container from "./components/Container";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
+import FilterBar, { type Filter } from "./components/FilterBar";
 import { useTasks } from "./hooks/useTasks";
 
 export default function App() {
+  const [filter, setFilter] = useState<Filter>("all");
+
   const { tasks, addTask, updateTask, removeTask } = useTasks();
 
   // handlers
@@ -22,14 +25,14 @@ export default function App() {
       <Header />
       <main className="flex-1 py-8">
         <Container>
-          <h1 className="text-2xl font-semibold">Todo List</h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-300">Tasks</p>
+          <h1 className="text-2xl font-semibold">Tasks</h1>
 
           <div className="mt-6 space-y-4">
+            <FilterBar value={filter} onChange={setFilter} />
             <AddTaskForm onAdd={addTask} />
             <TaskList
               tasks={tasks}
-              filter="all"
+              filter={filter}
               onToggle={handleToggle}
               onEdit={handleEdit}
               onDelete={handleDelete}
