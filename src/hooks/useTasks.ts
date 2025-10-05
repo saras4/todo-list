@@ -6,8 +6,20 @@ function genId(): TaskId {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function useTasks() {
-  // Ensure initial state is an array even if storage is corrupt or empty
+type UseTasks = {
+  tasks: Task[];
+  addTask: (title: string) => void;
+  updateTask: (
+    id: TaskId,
+    patch: Partial<Pick<Task, "title" | "status">>
+  ) => void;
+  removeTask: (id: TaskId) => void;
+  clearCompleted: () => void;
+  reorderTasks: (next: Task[]) => void;
+  setAll: (next: Task[]) => void;
+};
+
+export function useTasks(): UseTasks {
   const [tasks, setTasks] = useState<Task[]>(() => {
     const loaded = loadTasks();
     return Array.isArray(loaded) ? loaded : [];
@@ -17,7 +29,7 @@ export function useTasks() {
     saveTasks(tasks);
   }, [tasks]);
 
-  const api = useMemo(() => {
+  const api = useMemo<UseTasks>(() => {
     return {
       tasks,
       addTask: (title: string) => {
@@ -28,24 +40,24 @@ export function useTasks() {
           title: trimmed,
           status: "pending" as TaskStatus,
         };
-        // prev is guaranteed array due to initializer
         setTasks((prev) => [...prev, next]);
       },
-      updateTask: (
-        id: TaskId,
-        patch: Partial<Pick<Task, "title" | "status">>
-      ) => {
+      updateTask: (id, patch) => {
         setTasks((prev) =>
           prev.map((t) => (t.id === id ? { ...t, ...patch } : t))
         );
       },
-      removeTask: (id: TaskId) => {
+      removeTask: (id) => {
         setTasks((prev) => prev.filter((t) => t.id !== id));
       },
       clearCompleted: () => {
         setTasks((prev) => prev.filter((t) => t.status !== "completed"));
       },
-      setAll: (next: Task[]) => setTasks(Array.isArray(next) ? next : []),
+      reorderTasks: (next) => {
+        if (!Array.isArray(next)) return;
+        setTasks(next);
+      },
+      setAll: (next) => setTasks(Array.isArray(next) ? next : []),
     };
   }, [tasks]);
 

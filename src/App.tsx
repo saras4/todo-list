@@ -10,7 +10,7 @@ import { useTasks } from "./hooks/useTasks";
 export default function App() {
   const [filter, setFilter] = useState<Filter>("all");
 
-  const { tasks, addTask, updateTask, removeTask } = useTasks();
+  const { tasks, addTask, reorderTasks, updateTask, removeTask } = useTasks();
 
   // handlers
   const handleToggle = (id: string, checked: boolean) =>
@@ -33,6 +33,7 @@ export default function App() {
             <TaskList
               tasks={tasks}
               filter={filter}
+              reorderTasks={reorderTasks}
               onToggle={handleToggle}
               onEdit={handleEdit}
               onDelete={handleDelete}
