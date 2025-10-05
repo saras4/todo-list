@@ -24,15 +24,12 @@ export default function AddTaskForm({
     onAdd(trimmed);
     setTitle("");
     setError(null);
-    // Keep focus for fast entry
     inputRef.current?.focus();
   }
 
+  // Only handle Escape on the input; let Enter be handled by the form submit
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      submit();
-    } else if (e.key === "Escape") {
+    if (e.key === "Escape") {
       e.preventDefault();
       setTitle("");
       setError(null);
@@ -40,7 +37,7 @@ export default function AddTaskForm({
   }
 
   function onSubmit(e: FormEvent) {
-    e.preventDefault();
+    e.preventDefault(); // prevent full page reload
     submit();
   }
 
