@@ -1,6 +1,6 @@
 import type { TaskStatus } from "../types/task";
 
-export type Filter = "all" | TaskStatus;
+export type Filter = TaskStatus;
 
 type Props = {
   value: Filter; // current filter: 'all' | 'completed' | 'pending'

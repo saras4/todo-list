@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useTasks } from "./hooks/useTasks";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Container from "./components/Container";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
 import FilterBar, { type Filter } from "./components/FilterBar";
-import { useTasks } from "./hooks/useTasks";
 
 export default function App() {
   const [filter, setFilter] = useState<Filter>("all");

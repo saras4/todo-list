@@ -15,14 +15,14 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import TaskItem from "./TaskItem";
-import type { Task, TaskStatus } from "../types/task";
 import type {
   DraggableSyntheticListeners,
   UniqueIdentifier,
 } from "@dnd-kit/core";
+import TaskItem from "./TaskItem";
+import type { Task, TaskStatus } from "../types/task";
 
-type Filter = "all" | TaskStatus;
+type Filter = TaskStatus;
 
 type Props = {
   tasks: Task[];

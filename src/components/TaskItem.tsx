@@ -14,7 +14,8 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <li
+    <div
+      role="taskitem"
       className="group flex items-center gap-3 rounded-md border border-transparent px-3 py-2 transition-colors hover:border-gray-200 dark:hover:border-gray-800"
       data-completed={task.status === "completed"}
     >
@@ -68,6 +69,6 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
           setOpen(false);
         }}
       />
-    </li>
+    </div>
   );
 }
