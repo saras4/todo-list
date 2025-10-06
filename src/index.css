@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Task item enter/exit animations using Radix Presence */
+@keyframes task-enter-fade-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes task-exit-fade-slide {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.task-item.task-enter {
+  animation: task-enter-fade-slide 180ms ease-out both;
+}
+
+.task-item.task-exit {
+  animation: task-exit-fade-slide 180ms ease-in both;
+}
