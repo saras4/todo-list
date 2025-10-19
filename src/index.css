@@ -26,9 +26,9 @@
 }
 
 .task-item.task-enter {
-  animation: task-enter-fade-slide 180ms ease-out both;
+  animation: task-enter-fade-slide 1000ms ease-out both;
 }
 
 .task-item.task-exit {
-  animation: task-exit-fade-slide 180ms ease-in both;
+  animation: task-exit-fade-slide 300ms ease-in both;
 }
