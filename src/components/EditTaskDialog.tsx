@@ -1,31 +1,39 @@
 import { useEffect, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
+import type { TaskPriority } from "../types/task";
+import PrioritySelect from "./PrioritySelect";
 
 type Props = {
   open: boolean;
   onOpenChange: (next: boolean) => void;
   initialTitle: string;
-  onSave: (nextTitle: string) => void;
+  initialPriority: TaskPriority;
+  onSave: (nextTitle: string, nextPriority: TaskPriority) => void;
 };
 
 export default function EditTaskDialog({
   open,
   onOpenChange,
   initialTitle,
+  initialPriority,
   onSave,
 }: Props) {
   const [title, setTitle] = useState(initialTitle);
+  const [priority, setPriority] = useState<TaskPriority>(initialPriority);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Keep internal state in sync if the selected task changes while closed
   useEffect(() => {
-    if (!open) setTitle(initialTitle);
-  }, [initialTitle, open]);
+    if (!open) {
+      setTitle(initialTitle);
+      setPriority(initialPriority);
+    }
+  }, [initialTitle, initialPriority, open]);
 
   function handleSave() {
     const t = title.trim();
     if (!t) return;
-    onSave(t);
+    onSave(t, priority);
     onOpenChange(false); // close and return focus to trigger
   }
 
@@ -67,6 +75,22 @@ export default function EditTaskDialog({
                          dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:focus:border-blue-400 dark:focus:ring-blue-900/40"
               placeholder="Task title"
               aria-label="Task title"
+            />
+          </div>
+
+          <div className="mt-3">
+            <label
+              htmlFor="edit-task-priority"
+              className="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400"
+            >
+              Priority
+            </label>
+            <PrioritySelect
+              id="edit-task-priority"
+              value={priority}
+              onChange={setPriority}
+              aria-label="Task priority"
+              className="w-full"
             />
           </div>
 

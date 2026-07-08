@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Task, TaskId, TaskStatus } from "../types/task";
+import type { Task, TaskId, TaskPriority, TaskStatus } from "../types/task";
+import { DEFAULT_PRIORITY } from "../types/task";
 
 function genId(): TaskId {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -8,10 +9,10 @@ function genId(): TaskId {
 
 interface TaskStore {
   tasks: Task[];
-  addTask: (title: string) => void;
+  addTask: (title: string, priority?: TaskPriority) => void;
   updateTask: (
     id: TaskId,
-    patch: Partial<Pick<Task, "title" | "status">>
+    patch: Partial<Pick<Task, "title" | "status" | "priority">>
   ) => void;
   removeTask: (id: TaskId) => void;
   clearCompleted: () => void;
@@ -23,13 +24,14 @@ export const useTaskStore = create<TaskStore>()(
   persist(
     (set) => ({
       tasks: [],
-      addTask: (title: string) => {
+      addTask: (title: string, priority: TaskPriority = DEFAULT_PRIORITY) => {
         const trimmed = title.trim();
         if (!trimmed) return;
         const newTask: Task = {
           id: genId(),
           title: trimmed,
           status: "pending" as TaskStatus,
+          priority,
         };
         set((state) => ({ tasks: [...state.tasks, newTask] }));
       },
@@ -58,7 +60,17 @@ export const useTaskStore = create<TaskStore>()(
     }),
     {
       name: "todo.tasks",
-      version: 1,
+      version: 2,
+      migrate: (persisted, version) => {
+        const state = persisted as { tasks?: Task[] } | undefined;
+        if (version < 2 && state?.tasks) {
+          state.tasks = state.tasks.map((t) => ({
+            ...t,
+            priority: t.priority ?? DEFAULT_PRIORITY,
+          }));
+        }
+        return state as TaskStore;
+      },
     }
   )
 );

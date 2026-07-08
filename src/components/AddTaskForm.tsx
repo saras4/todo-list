@@ -1,9 +1,12 @@
 import { useState, useRef } from "react";
 import type { FormEvent, KeyboardEvent } from "react";
 import * as Slot from "@radix-ui/react-slot";
+import type { TaskPriority } from "../types/task";
+import { DEFAULT_PRIORITY } from "../types/task";
+import PrioritySelect from "./PrioritySelect";
 
 type Props = {
-  onAdd: (title: string) => void;
+  onAdd: (title: string, priority: TaskPriority) => void;
   placeholder?: string;
 };
 
@@ -12,6 +15,7 @@ export default function AddTaskForm({
   placeholder = "Add a task...",
 }: Props) {
   const [title, setTitle] = useState("");
+  const [priority, setPriority] = useState<TaskPriority>(DEFAULT_PRIORITY);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -21,8 +25,9 @@ export default function AddTaskForm({
       setError("Please enter a task.");
       return;
     }
-    onAdd(trimmed);
+    onAdd(trimmed, priority);
     setTitle("");
+    setPriority(DEFAULT_PRIORITY);
     setError(null);
     inputRef.current?.focus();
   }
@@ -68,6 +73,12 @@ export default function AddTaskForm({
           </p>
         )}
       </div>
+
+      <PrioritySelect
+        value={priority}
+        onChange={setPriority}
+        aria-label="New task priority"
+      />
 
       <Slot.Slot>
         <button

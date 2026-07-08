@@ -4,6 +4,7 @@ import Container from "../components/Container";
 import AddTaskForm from "../components/AddTaskForm";
 import TaskList from "../components/TaskList";
 import FilterBar, { type Filter } from "../components/FilterBar";
+import type { TaskPriority } from "../types/task";
 
 export default function TodoPage() {
   const [filter, setFilter] = useState<Filter>("all");
@@ -14,7 +15,8 @@ export default function TodoPage() {
   const handleToggle = (id: string, checked: boolean) =>
     updateTask(id, { status: checked ? "completed" : "pending" });
 
-  const handleEdit = (id: string, title: string) => updateTask(id, { title });
+  const handleEdit = (id: string, title: string, priority: TaskPriority) =>
+    updateTask(id, { title, priority });
 
   const handleDelete = (id: string) => removeTask(id);
 

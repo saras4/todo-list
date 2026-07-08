@@ -1,12 +1,12 @@
-import type { Task, TaskId } from "../types/task";
+import type { Task, TaskId, TaskPriority } from "../types/task";
 import { useTaskStore } from "../store/taskStore";
 
 type UseTasks = {
   tasks: Task[];
-  addTask: (title: string) => void;
+  addTask: (title: string, priority?: TaskPriority) => void;
   updateTask: (
     id: TaskId,
-    patch: Partial<Pick<Task, "title" | "status">>
+    patch: Partial<Pick<Task, "title" | "status" | "priority">>
   ) => void;
   removeTask: (id: TaskId) => void;
   clearCompleted: () => void;
