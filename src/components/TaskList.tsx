@@ -20,7 +20,7 @@ import type {
   UniqueIdentifier,
 } from "@dnd-kit/core";
 import TaskItem from "./TaskItem";
-import type { Task, TaskStatus } from "../types/task";
+import type { Task, TaskPriority, TaskStatus } from "../types/task";
 
 type Filter = TaskStatus;
 
@@ -29,7 +29,7 @@ type Props = {
   filter?: Filter;
   reorderTasks: (next: Task[]) => void;
   onToggle: (id: string, checked: boolean) => void;
-  onEdit: (id: string, title: string) => void;
+  onEdit: (id: string, title: string, priority: TaskPriority) => void;
   onDelete: (id: string) => void;
 };
 

@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import * as Checkbox from "@radix-ui/react-checkbox";
 import { Presence } from "@radix-ui/react-presence";
-import type { Task } from "../types/task";
+import type { Task, TaskPriority } from "../types/task";
 import EditTaskDialog from "./EditTaskDialog";
+import PriorityBadge from "./PriorityBadge";
 
 type Props = {
   task: Task;
   onToggle: (id: string, checked: boolean) => void;
-  onEdit: (id: string, title: string) => void;
+  onEdit: (id: string, title: string, priority: TaskPriority) => void;
   onDelete: (id: string) => void;
 };
 
@@ -55,7 +56,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
           <Checkbox.Indicator className="h-3 w-3 rounded-sm bg-white data-[state=unchecked]:hidden" />
         </Checkbox.Root>
 
-        <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <p
             className={`truncate text-sm ${
               task.status === "completed"
@@ -65,6 +66,7 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
           >
             {task.title}
           </p>
+          <PriorityBadge priority={task.priority} className="shrink-0" />
         </div>
 
         <div className="flex items-center gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
@@ -89,8 +91,9 @@ export default function TaskItem({ task, onToggle, onEdit, onDelete }: Props) {
           open={open}
           onOpenChange={setOpen}
           initialTitle={task.title}
-          onSave={(next) => {
-            onEdit(task.id, next);
+          initialPriority={task.priority}
+          onSave={(nextTitle, nextPriority) => {
+            onEdit(task.id, nextTitle, nextPriority);
             setOpen(false);
           }}
         />
